@@ -241,6 +241,21 @@ footer {
     opacity: 1;
 }
 
+/* Poem verse styling */
+.poem-verse {
+    font-size: 1.6rem;
+    line-height: 1.8;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
+    margin-bottom: 1rem;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+}
+
+.poem-verse:last-child {
+    margin-bottom: 0;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .header-content h1 {
@@ -320,6 +335,8 @@ footer {
     
     .poem-verse {
         font-size: 1.3rem;
+        color: #ffffff !important;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
     }
     
     .loader-content {

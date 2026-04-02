@@ -218,17 +218,31 @@ class AIPoetryGenerator {
             let generatedText = '';
             
             if (this.model === 'distilgpt2' && this.pipeline) {
-                // Generación real con IA
-                const result = await this.pipeline(prompt, {
-                    max_length: maxLength,
-                    temperature: temperature,
-                    do_sample: true,
-                    top_k: 50,
-                    top_p: 0.95,
-                    repetition_penalty: 1.2
-                });
-                
-                generatedText = result[0].generated_text;
+                try {
+                    // Timeout para generación (15 segundos máximo)
+                    const timeoutPromise = new Promise((_, reject) => {
+                        setTimeout(() => reject(new Error('Timeout en generación')), 15000);
+                    });
+                    
+                    // Generación real con IA - parámetros más conservadores
+                    const generationPromise = this.pipeline(prompt, {
+                        max_new_tokens: 80,  // Más pequeño
+                        temperature: Math.min(temperature, 0.8),  // Más conservador
+                        do_sample: true,
+                        top_k: 20,  // Más reducido
+                        top_p: 0.85,  // Más reducido
+                        repetition_penalty: 1.05  // Más reducido
+                    });
+                    
+                    // Ejecutar con timeout
+                    const result = await Promise.race([generationPromise, timeoutPromise]);
+                    
+                    generatedText = result[0].generated_text;
+                    console.log('Generación IA exitosa:', generatedText.substring(0, 100));
+                } catch (modelError) {
+                    console.warn('Error en generación IA, usando fallback:', modelError);
+                    generatedText = this.generateFallbackPoem(themes);
+                }
             } else {
                 // Fallback: poemas predefinidos
                 generatedText = this.generateFallbackPoem(themes);
