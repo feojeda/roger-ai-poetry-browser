@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Poesía IA en el Navegador - Roger</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Transformers.js desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-brain"></i> Poesía IA en el Navegador</h1>
+                <p class="subtitle">Para Roger y su vecina de 19 años - 100% en tu browser</p>
+                <div class="theme-tags">
+                    <span class="tag"><i class="fas fa-robot"></i> IA Local</span>
+                    <span class="tag">🤖 Transformers.js</span>
+                    <span class="tag">📐 Matemáticas</span>
+                    <span class="tag">❤️ Romance</span>
+                    <span class="tag">🏘️ Vecindad</span>
+                </div>
+                <div class="tech-badge">
+                    <span class="badge"><i class="fas fa-microchip"></i> WebGPU/WebAssembly</span>
+                    <span class="badge"><i class="fas fa-download"></i> Modelo: DistilGPT-2</span>
+                    <span class="badge"><i class="fas fa-shield-alt"></i> 100% Privado</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="generator-section">
+                <div class="status-panel">
+                    <div class="status-box" id="model-status">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span>Modelo: <strong>No cargado</strong></span>
+                        <small>Presiona "GENERAR CON IA" para cargar</small>
+                    </div>
+                    <div class="status-box" id="performance-status">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Rendimiento: <strong>Listo</strong></span>
+                        <small>WebAssembly activado</small>
+                    </div>
+                    <div class="status-box" id="storage-status">
+                        <i class="fas fa-database"></i>
+                        <span>Cache: <strong>0 MB</strong></span>
+                        <small>Se guardará localmente</small>
+                    </div>
+                </div>
+
+                <div class="poem-display" id="poem-display">
+                    <div class="placeholder-poem" id="placeholder-poem">
+                        <p class="poem-line"><i class="fas fa-quote-left"></i> La IA generará poemas sobre matemáticas, vecindad y romance <i class="fas fa-quote-right"></i></p>
+                        <div class="equation">∫<sub>IA</sub> d(poesía) = 🤖 × ❤️</div>
+                        <div class="loading-info" id="loading-info">
+                            <p><i class="fas fa-info-circle"></i> El modelo se descargará cuando lo solicites (≈50MB)</p>
+                        </div>
+                    </div>
+                    <div class="generated-poem" id="generated-poem" style="display: none;"></div>
+                </div>
+
+                <div class="loading-overlay" id="loading-overlay">
+                    <div class="loader-content">
+                        <div class="loader-spinner">
+                            <i class="fas fa-brain fa-spin"></i>
+                        </div>
+                        <h3><i class="fas fa-download"></i> Descargando modelo IA</h3>
+                        <p id="loading-text">Inicializando Transformers.js...</p>
+                        <div class="progress-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                        </div>
+                        <p class="progress-text" id="progress-text">0% • 0MB / 50MB</p>
+                        <p class="loader-note">La primera descarga puede tomar 1-2 minutos dependiendo de tu conexión</p>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="generate-btn" id="generate-btn">
+                        <i class="fas fa-robot"></i> GENERAR CON IA
+                    </button>
+                    
+                    <div class="model-controls">
+                        <div class="control-group">
+                            <label for="temperature"><i class="fas fa-thermometer-half"></i> Creatividad:</label>
+                            <input type="range" id="temperature" min="0.5" max="1.5" step="0.1" value="0.9">
+                            <span id="temp-value">0.9</span>
+                        </div>
+                        <div class="control-group">
+                            <label for="length"><i class="fas fa-ruler"></i> Longitud:</label>
+                            <input type="range" id="length" min="50" max="200" step="10" value="120">
+                            <span id="length-value">120 caracteres</span>
+                        </div>
+                    </div>
+
+                    <div class="secondary-buttons">
+                        <button class="action-btn" id="copy-btn">
+                            <i class="far fa-copy"></i> Copiar
+                        </button>
+                        <button class="action-btn" id="share-btn">
+                            <i class="fas fa-share-alt"></i> Compartir
+                        </button>
+                        <button class="action-btn" id="clear-cache-btn">
+                            <i class="fas fa-trash"></i> Limpiar Cache
+                        </button>
+                        <button class="action-btn" id="fallback-btn">
+                            <i class="fas fa-random"></i> Versos Aleatorios
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inspiration">
+                    <h3><i class="fas fa-lightbulb"></i> ¿Cómo funciona?</h3>
+                    <p id="inspiration-text">Este generador ejecuta <strong>DistilGPT-2</strong> directamente en tu navegador usando Transformers.js. No envía datos a servidores externos - todo el procesamiento ocurre localmente en tu dispositivo.</p>
+                </div>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-info-circle"></i> Tecnología IA en el Navegador</h2>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <i class="fas fa-download"></i>
+                        <h4>Descarga Única</h4>
+                        <p>El modelo (≈50MB) se descarga solo la primera vez y se guarda en cache local.</p>
+                    </div>
+                    <div class="tech-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>100% Privado</h4>
+                        <p>Tu poema se genera localmente. No se envía a servidores externos.</p>
+                    </div>
+                    <div class="tech-card">
+                        <i class="fas fa-bolt"></i>
+                        <h4>WebGPU/WebAssembly</h4>
+                        <p>Optimizado para rendimiento en móviles y computadoras.</p>
+                    </div>
+                    <div class="tech-card">
+                        <i class="fas fa-wifi-slash"></i>
+                        <h4>Funciona Offline</h4>
+                        <p>Después de la primera descarga, puedes generar poemas sin conexión.</p>
+                    </div>
+                </div>
+
+                <div class="instructions">
+                    <h3><i class="fas fa-list-ol"></i> Instrucciones Importantes</h3>
+                    <ol>
+                        <li><strong>Primera carga lenta:</strong> La descarga inicial del modelo puede tomar 1-2 minutos (50-80MB).</li>
+                        <li><strong>Conexión necesaria:</strong> Solo para la primera descarga del modelo.</li>
+                        <li><strong>Funciona offline:</strong> Después de la primera descarga, puedes usar la app sin internet.</li>
+                        <li><strong>Espacio necesario:</strong> El modelo ocupa ≈50MB en el cache de tu navegador.</li>
+                        <li><strong>Compatibilidad:</strong> Funciona en Chrome, Firefox, Safari y Edge modernos.</li>
+                    </ol>
+                </div>
+
+                <div class="prompt-info">
+                    <h3><i class="fas fa-magic"></i> Prompt Engineering</h3>
+                    <p>El modelo está configurado para generar poemas sobre estos temas combinados:</p>
+                    <ul>
+                        <li><strong>Matemáticas:</strong> Integrales, derivadas, ecuaciones, teoremas</li>
+                        <li><strong>Vecindad:</strong> Balcones, paredes compartidas, encuentros casuales</li>
+                        <li><strong>Romance:</strong> Suspiros, miradas, corazones latentes</li>
+                        <li><strong>Roger y su vecina:</strong> Situación específica de Roger y su vecina de 19 años</li>
+                    </ul>
+                </div>
+
+                <p class="disclaimer"><i class="fas fa-exclamation-triangle"></i> <strong>Aviso:</strong> La IA puede generar contenido impredecible. Los poemas son creados por un modelo de lenguaje y pueden contener errores o incoherencias.</p>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>Generador de Poesía IA en el Navegador © 2024</p>
+                <p>Creado con 🤖, ❤️ y Transformers.js para Roger</p>
+                <div class="footer-links">
+                    <a href="https://github.com/xenova/transformers.js" class="footer-link" target="_blank">
+                        <i class="fab fa-github"></i> Transformers.js
+                    </a>
+                    <a href="#" class="footer-link" id="view-cache">
+                        <i class="fas fa-database"></i> Ver Cache
+                    </a>
+                    <a href="#" class="footer-link" id="debug-info">
+                        <i class="fas fa-bug"></i> Info Debug
+                    </a>
+                </div>
+                <div class="model-info">
+                    <small>Modelo: DistilGPT-2 • Framework: Transformers.js 2.17.2</small>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="notification" id="notification">
+        <span id="notification-text"></span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

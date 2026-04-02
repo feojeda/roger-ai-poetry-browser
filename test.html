@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba - Generador de Poesía IA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba de Compatibilidad - Generador de Poesía IA</h1>
+    
+    <div id="test-results">
+        <div class="test-result info">
+            <h3>🧪 Ejecutando pruebas de compatibilidad...</h3>
+        </div>
+    </div>
+    
+    <script>
+        const tests = [
+            {
+                name: 'WebAssembly',
+                test: () => 'WebAssembly' in window,
+                message: 'WebAssembly está disponible',
+                error: 'WebAssembly no está disponible. La IA no funcionará.'
+            },
+            {
+                name: 'Fetch API',
+                test: () => 'fetch' in window,
+                message: 'Fetch API disponible para descargar el modelo',
+                error: 'Fetch API no disponible'
+            },
+            {
+                name: 'ES6 Modules',
+                test: () => {
+                    try {
+                        new Function('import("")');
+                        return true;
+                    } catch {
+                        return false;
+                    }
+                },
+                message: 'Soporte para módulos ES6',
+                error: 'No hay soporte para módulos ES6'
+            },
+            {
+                name: 'LocalStorage',
+                test: () => 'localStorage' in window,
+                message: 'LocalStorage disponible para cache',
+                error: 'LocalStorage no disponible'
+            },
+            {
+                name: 'Navegador Moderno',
+                test: () => {
+                    const ua = navigator.userAgent;
+                    return !ua.includes('MSIE') && !ua.includes('Trident/');
+                },
+                message: 'Navegador moderno detectado',
+                error: 'Navegador antiguo detectado. Se recomienda actualizar.'
+            }
+        ];
+        
+        const resultsContainer = document.getElementById('test-results');
+        let allPassed = true;
+        
+        tests.forEach(test => {
+            const result = test.test();
+            const div = document.createElement('div');
+            div.className = `test-result ${result ? 'success' : 'error'}`;
+            
+            div.innerHTML = `
+                <h4>${result ? '✅' : '❌'} ${test.name}</h4>
+                <p>${result ? test.message : test.error}</p>
+            `;
+            
+            resultsContainer.appendChild(div);
+            
+            if (!result) allPassed = false;
+        });
+        
+        // Resultado final
+        const finalDiv = document.createElement('div');
+        finalDiv.className = `test-result ${allPassed ? 'success' : 'warning'}`;
+        
+        if (allPassed) {
+            finalDiv.innerHTML = `
+                <h3>🎉 ¡Todas las pruebas pasaron!</h3>
+                <p>Tu navegador es compatible con el Generador de Poesía IA.</p>
+                <p><a href="index.html">Ir a la aplicación principal</a></p>
+            `;
+        } else {
+            finalDiv.innerHTML = `
+                <h3>⚠️ Algunas pruebas fallaron</h3>
+                <p>Es posible que algunas funciones no estén disponibles.</p>
+                <p>Se recomienda usar Chrome, Firefox, Safari o Edge actualizados.</p>
+                <p><a href="index.html">Intentar de todos modos</a></p>
+            `;
+        }
+        
+        resultsContainer.appendChild(finalDiv);
+    </script>
+</body>
+</html>
