@@ -1,0 +1,25 @@
+{
+  "name": "roger-ai-poetry-browser",
+  "version": "1.0.0",
+  "description": "Generador de Poesía IA en el Navegador - Roger",
+  "main": "index.html",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "install-browsers": "playwright install",
+    "serve": "python3 -m http.server 8080",
+    "dev": "concurrently \"npm run serve\" \"npm run test:ui\""
+  },
+  "keywords": ["ai", "poetry", "transformers", "browser", "javascript"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "concurrently": "^8.0.0"
+  }
+}
